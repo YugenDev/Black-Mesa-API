@@ -11,7 +11,7 @@ public class Gastos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private String id;
+    private Integer id;
 
     @Column(name = "categoria", nullable = false)
     private Integer categoria;
@@ -30,7 +30,7 @@ public class Gastos {
     public Gastos() {
     }
 
-    public Gastos(String id, Integer categoria, Integer valor, LocalDate fecha, Integer cuentaDestino, Integer cuentaOrigen) {
+    public Gastos(Integer id, Integer categoria, Integer valor, LocalDate fecha, Integer cuentaDestino, Integer cuentaOrigen) {
         this.id = id;
         this.categoria = categoria;
         this.valor = valor;
@@ -39,11 +39,11 @@ public class Gastos {
         this.cuentaOrigen = cuentaOrigen;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
