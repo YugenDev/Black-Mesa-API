@@ -1,7 +1,6 @@
 package com.example.blackmesaAPI.controladores;
 
 import com.example.blackmesaAPI.entidades.Gastos;
-import com.example.blackmesaAPI.entidades.Usuario;
 import com.example.blackmesaAPI.servicios.GastosServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +45,7 @@ public class GastosControlador {
     }
 
     @GetMapping
-    public ResponseEntity<List<Gastos>> consultargasto() throws Exception{
+    public ResponseEntity<List<Gastos>> consultargasto () throws Exception{
         try{
             List<Gastos> listaConsultada = this.gastosServicio.buscarTodosLosGastos();
             return ResponseEntity

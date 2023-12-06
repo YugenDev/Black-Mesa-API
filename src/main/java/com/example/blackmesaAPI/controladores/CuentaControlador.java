@@ -1,7 +1,7 @@
 package com.example.blackmesaAPI.controladores;
 
-import com.example.blackmesaAPI.entidades.Usuario;
-import com.example.blackmesaAPI.servicios.UsuarioServicio;
+import com.example.blackmesaAPI.entidades.Cuenta;
+import com.example.blackmesaAPI.servicios.CuentaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/black-mesa/usuario")
-public class UsuarioControlador {
+@RequestMapping("api/black-mesa/cuenta")
+public class CuentaControlador {
 
     @Autowired
-    UsuarioServicio usuarioServicio;
+    CuentaServicio cuentaServicio;
 
     @PostMapping
-    public ResponseEntity<?> agregarUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<?> agregarCuenta(@RequestBody Cuenta cuenta){
         try {
-            Usuario respuestaServicio = this.usuarioServicio.registrarUsuario(usuario);
+            Cuenta respuestaCuenta = this.cuentaServicio.registrarCuenta(cuenta);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(respuestaServicio);
+                    .body(respuestaCuenta);
         }catch (Exception error){
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -31,12 +31,12 @@ public class UsuarioControlador {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarUsuario(@PathVariable Integer id){
+    public ResponseEntity<?> buscarCuenta(@PathVariable Integer id){
         try {
-            Usuario respuestaAfiliado = this.usuarioServicio.consultarUsuario(id);
+            Cuenta respuestaCuenta = this.cuentaServicio.consultarCuenta(id);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(respuestaAfiliado);
+                    .body(respuestaCuenta);
         }catch (Exception error){
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -45,9 +45,9 @@ public class UsuarioControlador {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> consultarUsuarios() throws Exception{
+    public ResponseEntity<List<Cuenta>> consultarExamenes() throws Exception{
         try{
-            List<Usuario> listaConsultada = this.usuarioServicio.buscarTodosLosUsuarios();
+            List<Cuenta> listaConsultada = this.cuentaServicio.buscarTodosLasCuentas();
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(listaConsultada);
@@ -59,12 +59,12 @@ public class UsuarioControlador {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> editarUsuario(@PathVariable Integer id, @RequestBody Usuario usuario) throws Exception {
+    public ResponseEntity<Cuenta> editarCuenta(Integer id, @RequestBody Cuenta cuenta) throws Exception {
         try{
-            Usuario usuarioRespuesta =  this.usuarioServicio.editarUsuario(id, usuario);
+            Cuenta cuentaRespuesta =  this.cuentaServicio.editarCuenta(id, cuenta);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(usuarioRespuesta);
+                    .body(cuentaRespuesta);
         }catch (Exception error) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -74,16 +74,15 @@ public class UsuarioControlador {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarUsuario (@PathVariable Integer id) throws Exception{
+    public ResponseEntity<?> eliminarCuenta (@PathVariable Integer id) throws Exception{
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.usuarioServicio.retirarUsuario(id));
+                    .body(this.cuentaServicio.retirarCuenta(id));
         }catch (Exception error){
             return  ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(error.getMessage());
         }
     }
-
 }
