@@ -1,8 +1,10 @@
 package com.example.blackmesaAPI.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "cuenta")
@@ -34,10 +36,18 @@ public class Cuenta {
     @Column(nullable = false, unique = true)
     private String numeroCuenta;
 
+    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Bolsillos> bolsillos;
+
+    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<MensajeGPT> mensajes;
+
     public Cuenta() {
     }
 
-    public Cuenta(Integer id, String nombre, String apellido, String tipoDoc, String documento, Date fechaNacimiento, String correo, String numeroCuenta) {
+    public Cuenta(Integer id, String nombre, String apellido, String tipoDoc, String documento, Date fechaNacimiento, String correo, String numeroCuenta, List<Bolsillos> bolsillos, List<MensajeGPT> mensajes) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -46,6 +56,8 @@ public class Cuenta {
         this.fechaNacimiento = fechaNacimiento;
         this.correo = correo;
         this.numeroCuenta = numeroCuenta;
+        this.bolsillos = bolsillos;
+        this.mensajes = mensajes;
     }
 
     public Integer getId() {
@@ -110,5 +122,21 @@ public class Cuenta {
 
     public void setNumeroCuenta(String numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
+    }
+
+    public List<Bolsillos> getBolsillos() {
+        return bolsillos;
+    }
+
+    public void setBolsillos(List<Bolsillos> bolsillos) {
+        this.bolsillos = bolsillos;
+    }
+
+    public List<MensajeGPT> getMensajes() {
+        return mensajes;
+    }
+
+    public void setMensajes(List<MensajeGPT> mensajes) {
+        this.mensajes = mensajes;
     }
 }

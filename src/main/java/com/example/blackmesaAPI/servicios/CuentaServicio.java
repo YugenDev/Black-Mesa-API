@@ -2,12 +2,15 @@ package com.example.blackmesaAPI.servicios;
 
 import com.example.blackmesaAPI.entidades.Cuenta;
 import com.example.blackmesaAPI.entidades.Gastos;
+import com.example.blackmesaAPI.entidades.MensajeGPT;
 import com.example.blackmesaAPI.repositorios.CuentaRepositorio;
+import com.example.blackmesaAPI.repositorios.MensajeRepository;
 import com.example.blackmesaAPI.servicios.utilities.Msj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +25,9 @@ public class CuentaServicio {
     @Autowired
     CuentaRepositorio cuentaRepositorio;
 
+    @Autowired
+    MensajeRepository mensajeRepository;
+
     public Cuenta registrarCuenta(Cuenta cuenta) throws Exception {
         try {
             // Genera un número de cuenta aleatorio
@@ -29,7 +35,16 @@ public class CuentaServicio {
 
             cuenta.setNumeroCuenta(numeroCuenta);
 
-            return this.cuentaRepositorio.save(cuenta);
+            // Guarda la cuenta en la base de datos
+            Cuenta cuentaRegistrada = this.cuentaRepositorio.save(cuenta);
+
+            // Asocia un mensaje de bienvenida a la nueva cuenta
+            MensajeGPT mensajeBienvenida = new MensajeGPT();
+            mensajeBienvenida.setContenido("¡Bienvenido a nuestra plataforma, " + cuenta.getNombre() + "!");
+            mensajeBienvenida.setCuenta(cuentaRegistrada);
+            this.mensajeRepository.save(mensajeBienvenida);
+
+            return cuentaRegistrada;
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             throw new Exception("Error de integridad de datos al registrar la cuenta. Detalles: " + e.getMessage());
@@ -72,6 +87,19 @@ public class CuentaServicio {
             return listaConsultada;
         }catch (Exception error){
             throw new Exception(Msj.ERROR_NO_ENCUENTRA.getMensaje());
+        }
+    }
+
+    public List<MensajeGPT> obtenerMensajesDeCuenta(Integer idCuenta) {
+        // Obtén la cuenta
+        Cuenta cuenta = cuentaRepositorio.findById(idCuenta).orElse(null);
+
+        if (cuenta != null) {
+            // Devuelve los mensajes asociados a la cuenta
+            return cuenta.getMensajes();
+        } else {
+            // Manejo de error si la cuenta no existe
+            throw new EntityNotFoundException("Cuenta no encontrada con ID: " + idCuenta);
         }
     }
 
