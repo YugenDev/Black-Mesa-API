@@ -1,34 +1,29 @@
 trigger:
-- main
+- main 
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
+
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
 - task: CopyFiles@2
   inputs:
-    contents: '**/*.jar'
-    targetFolder: $(build.artifactStagingDirectory)
+    contents: 'target/*.jar'
+    targetFolder: $(Build.ArtifactStagingDirectory)
 
 - task: PublishBuildArtifacts@1
-  inputs:
+  inputs: 
     pathtoPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: drop
+    artifactName: JavaAPI
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: 'Azure subscription 1'
-    appType: 'webAppLinux'
-    appName: 'Black-Mesa-API'
-    package: '$(Build.ArtifactStagingDirectory)/**/*.jar'
+    azureSubscription: 'Web App'
+    appName: 'Black-Mesa-API' 
+    appType: webApp
+    package: $(Build.ArtifactStagingDirectory)/**/*.jar
