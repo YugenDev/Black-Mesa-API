@@ -1,30 +1,29 @@
 trigger:
-- main 
+- main
 
 pool:
-  vmImage: ubuntu-latest
+  name: Default 
 
 steps:
-
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'
+    mavenPomFile: 'pom.xml' 
     goals: 'package'
 
 - task: CopyFiles@2
   inputs:
     contents: 'target/*.jar'
-    targetFolder: $(Build.ArtifactStagingDirectory)
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs: 
-    pathtoPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: JavaAPI
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: drop
 
 - task: AzureWebApp@1
-  inputs:
+  inputs: 
     azureSubscription: 'Web App'
-    appName: 'Black-Mesa-API' 
-    appType: webApp
-    package: $(Build.ArtifactStagingDirectory)/**/*.jar
-    sku: 'F1'
+    appType: 'webAppLinux'
+    appName: 'Black-Mesa-API'
+    package: '$(Build.ArtifactStagingDirectory)/*.jar'
+    appServicePlan: 'F1'
