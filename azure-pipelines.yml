@@ -28,7 +28,7 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: 'Azure subscription 1'
+    azureSubscription: '19998330-e962-4c87-a45c-d1aabe69be78'
     appType: 'webAppLinux'
     appName: 'Black-Mesa-API'
     package: '$(Build.ArtifactStagingDirectory)/**/*.jar'
