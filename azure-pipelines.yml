@@ -27,3 +27,4 @@ steps:
     appName: 'Black-Mesa-API' 
     appType: webApp
     package: $(Build.ArtifactStagingDirectory)/**/*.jar
+    sku: 'F1'
